@@ -1,0 +1,17 @@
+{
+    "name": "Attiny85 FasterPin",
+    "keywords": "fast, faster, pin, attiny85",
+    "version": "0.1.0",
+    "description": "Library which lets you to control pins in more efficient way",
+    "authors": {
+        "name": "Mindaugas Žvirblis",
+        "email": "mz@9g.lt",
+        "url": "https://github.com/sponsors/blinkinglight/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/9glt/arduino-attiny85-fastpin-library.git"
+    },
+    "frameworks": "arduino",
+    "platforms": "avr"
+}
