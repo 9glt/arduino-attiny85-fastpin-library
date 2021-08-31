@@ -4,7 +4,7 @@
 class Attiny85FasterPin {
     private:
         uint8_t timer;
-        volatile uint8_t bit;
+        uint8_t bit;
         uint8_t port;
         uint8_t pin;
         void turnOffPWM(uint8_t timer);

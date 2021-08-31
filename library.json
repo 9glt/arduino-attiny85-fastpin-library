@@ -2,7 +2,7 @@
     "name": "Attiny85 FasterPin",
     "keywords": "fast, faster, pin, attiny85",
     "version": "0.1.0",
-    "description": "Library which lets you to control pins in more efficient way",
+    "description": "Library which lets you to control pins in more efficient way. Provides Attiny85FasterPin.h and Attiny85IO.h",
     "authors": {
         "name": "Mindaugas Žvirblis",
         "email": "mz@9g.lt",
