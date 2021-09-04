@@ -103,6 +103,5 @@ void Attiny85IO::digitalWrite()
 template <uint8_t PIN>
 uint8_t Attiny85IO::digitalRead()
 {
-    uint8_t _pin = pins[PIN];
-    return PORTB & _pin > 0;
+    return bitRead(PORTB, PIN);
 }
