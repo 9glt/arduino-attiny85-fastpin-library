@@ -4,13 +4,13 @@
 Attiny85IO io;
 
 void setup(){
-  io.pinMode3(OUTPUT);
+  io.pinMode<3, OUTPUT>();
 }
 
 void loop()
 {
-  io.FastWritePin3(HIGH);
+  io.digitalWrite<3, HIGH>();
   delay(1000);
-  io.FastWritePin3(LOW);
+  io.digitalWrite<3, LOW>();
   delay(1000);
 }

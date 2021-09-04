@@ -2,37 +2,115 @@
 
 class Attiny85IO
 {
+private:
+    constexpr static uint8_t pins[6] = {
+        1 << PB0, 1 << PB1, 1 << PB2, 1 << PB3, 1 << PB4, 1 << PB5};
 
 public:
-    void pinMode0(uint8_t value);
-    void pinMode1(uint8_t value);
-    void pinMode2(uint8_t value);
-    void pinMode3(uint8_t value);
-    void pinMode4(uint8_t value);
-    void pinMode5(uint8_t value);
+    template <uint8_t pin, uint8_t mode>
+    void pinMode();
 
-    uint8_t FastReadPin0();
-    uint8_t FastReadPin1();
-    uint8_t FastReadPin2();
-    uint8_t FastReadPin3();
-    uint8_t FastReadPin4();
-    uint8_t FastReadPin5();
+    template <uint8_t pin, uint8_t value>
+    void analogWrite();
 
-    void FastWritePin0(uint8_t value);
-    void FastWritePin1(uint8_t value);
-    void FastWritePin2(uint8_t value);
-    void FastWritePin3(uint8_t value);
-    void FastWritePin4(uint8_t value);
-    void FastWritePin5(uint8_t value);
+    template <uint8_t pin>
+    uint16_t analogRead();
 
-    void AnalogWritePin0(uint8_t value);
-    void AnalogWritePin1(uint8_t value);
-    void AnalogWritePin4(uint8_t value);
+    template <uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder>
+    uint8_t shiftIn();
 
-    uint8_t AnalogReadPin0();
-    uint8_t AnalogReadPin1();
-    uint8_t AnalogReadPin2();
-    uint8_t AnalogReadPin3();
-    uint8_t AnalogReadPin4();
-    uint8_t AnalogReadPin5();
+    template <uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder>
+    void shiftOut(uint8_t val);
+
+    template <uint8_t PIN, uint8_t VALUE>
+    void digitalWrite();
+
+    template <uint8_t PIN>
+    uint8_t digitalRead();
 };
+
+template <uint8_t pin, uint8_t mode>
+void Attiny85IO::pinMode()
+{
+    ::pinMode(pin, mode);
+}
+
+template <uint8_t pin, uint8_t value>
+void Attiny85IO::analogWrite()
+{
+    ::analogWrite(pin, value);
+}
+
+template <uint8_t pin>
+uint16_t Attiny85IO::analogRead()
+{
+    return ::analogRead(pin);
+}
+
+template <uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder>
+uint8_t Attiny85IO::shiftIn()
+{
+    uint8_t value = 0;
+    uint8_t i;
+
+    uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
+    uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
+
+    for (i = 0; i < 8; ++i)
+    {
+        PORTB |= _clockPin;
+        if (bitOrder == LSBFIRST)
+            value |= (!!(PINB & _dataPin)) << i;
+        else
+            value |= (!!(PINB & _dataPin)) << (7 - i);
+        PORTB &= ~(_clockPin);
+    }
+    return value;
+}
+
+template <uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder>
+void Attiny85IO::shiftOut(uint8_t val)
+{
+    uint8_t i;
+
+    uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
+    uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
+
+    for (i = 0; i < 8; i++)
+    {
+        if (bitOrder == LSBFIRST)
+        {
+            if (!!(val & (1 << i)) == 0)
+                PORTB &= ~(_clockPin);
+            else
+                PORTB |= _clockPin;
+        }
+        else
+        {
+            if (!!(val & (1 << (7 - i))) == 0)
+                PORTB &= ~(_clockPin);
+            else
+                PORTB |= _clockPin;
+        }
+
+        PORTB |= _dataPin;
+        PORTB &= ~(_dataPin);
+    }
+}
+
+template <uint8_t PIN, uint8_t VALUE>
+void Attiny85IO::digitalWrite()
+{
+    uint8_t _pin = pins[PIN];
+    if (VALUE == HIGH)
+        PORTB |= _pin;
+    else
+        PORTB &= ~(_pin);
+}
+
+template <uint8_t PIN>
+uint8_t Attiny85IO::digitalRead()
+{
+    uint8_t _pin = pins[PIN];
+    return PORTB & _pin;
+}

@@ -27,14 +27,17 @@ Attiny85IO example:
 Attiny85IO io;
 
 void setup(){
-  io.pinMode3(OUTPUT);
+  io.pinMode<3,OUTPUT>();
 }
 
+
+// this on my attiny85 with internal 8mhz oscilator gives about 1.35Mhz output.
+// uncomment delay to blink LED 
 void loop()
 {
-  io.FastWritePin3(HIGH);
-  delay(1000);
-  io.FastWritePin3(LOW);
-  delay(1000);
+  io.digitalWrite<3, HIGH>();
+  // delay(1000);
+  io.digitalWrite<3, LOW>();
+  // delay(1000);
 }
 ```
