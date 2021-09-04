@@ -102,15 +102,12 @@ template <uint8_t PIN, uint8_t VALUE>
 void Attiny85IO::digitalWrite()
 {
     uint8_t _pin = pins[PIN];
-    if (VALUE == HIGH)
-        PORTB |= _pin;
-    else
-        PORTB &= ~(_pin);
+    bitWrite(PORTB, PIN, VALUE);
 }
 
 template <uint8_t PIN>
 uint8_t Attiny85IO::digitalRead()
 {
     uint8_t _pin = pins[PIN];
-    return PORTB & _pin;
+    return PORTB & _pin > 0;
 }
