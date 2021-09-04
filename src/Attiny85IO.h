@@ -2,10 +2,6 @@
 
 class Attiny85IO
 {
-private:
-    constexpr static uint8_t pins[6] = {
-        1 << PB0, 1 << PB1, 1 << PB2, 1 << PB3, 1 << PB4, 1 << PB5};
-
 public:
     template <uint8_t pin, uint8_t mode>
     void pinMode();
@@ -53,8 +49,8 @@ uint8_t Attiny85IO::shiftIn()
     uint8_t value = 0;
     uint8_t i;
 
-    uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
-    uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
+    const uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
+    const uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
 
     for (i = 0; i < 8; ++i)
     {
@@ -73,8 +69,8 @@ void Attiny85IO::shiftOut(uint8_t val)
 {
     uint8_t i;
 
-    uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
-    uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
+    const uint8_t _dataPin = (uint8_t)digitalPinToBitMask(dataPin);
+    const uint8_t _clockPin = (uint8_t)digitalPinToBitMask(clockPin);
 
     for (i = 0; i < 8; i++)
     {
@@ -101,7 +97,6 @@ void Attiny85IO::shiftOut(uint8_t val)
 template <uint8_t PIN, uint8_t VALUE>
 void Attiny85IO::digitalWrite()
 {
-    uint8_t _pin = pins[PIN];
     bitWrite(PORTB, PIN, VALUE);
 }
 
